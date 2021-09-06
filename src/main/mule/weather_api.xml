@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bdfddcef-3959-4742-a3b9-aea7900cc22d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="e6322fe5-72c4-400f-ba7c-f618e307fa6f" basePath="/data/2.5" >
+		<http:request-connection host="api.openweathermap.org" port="80" />
+	</http:request-config>
+	<api-gateway:autodiscovery apiId="16823244" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="018901bc-87ff-4548-b814-aadd8eae79ad" flowRef="weather_apiFlow" />
+	<flow name="weather_apiFlow" doc:id="8e919ccf-bb1c-48c9-91b0-147cfb9e1e4d" >
+		<http:listener doc:name="Listener" doc:id="9058f0fd-3320-4120-beb0-841a52a7fa61" config-ref="HTTP_Listener_config" path="/weather"/>
+		<set-variable value="bbc704be84da27fdccd6cb18d8b19cb5" doc:name="key" doc:id="10e94527-e57f-4bb4-a6f3-a18efa0733b2" variableName="key"/>
+		<http:request method="GET" doc:name="Request" doc:id="3f163c35-46f8-4b92-b338-4274a7851615" config-ref="HTTP_Request_configuration" path="/weather">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"appid" : vars.key,
+	"q" : attributes.queryParams.city,
+	"units" : "metric"
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="3cb79224-f752-41ce-99f5-99c205b25175" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{ 
+   City: payload.name, 
+   mostly: payload.weather[0].main,
+   description: payload.weather[0].description,
+   "MaxTemp(Celsius)": payload.main.temp_max,
+    "MinTemp(Celsius)": payload.main.temp_min,
+    "AvgTemp(Celsius)": payload.main.temp,
+    "Pressure(hPa)": payload.main.pressure,
+    "Humidity(%)": payload.main.humidity,
+    Visibility: payload.visibility,
+    "WindSpeed(mts/sec)": payload.wind.speed
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
