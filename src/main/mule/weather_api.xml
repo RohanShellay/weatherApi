@@ -12,9 +12,8 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="e6322fe5-72c4-400f-ba7c-f618e307fa6f" basePath="/data/2.5" >
 		<http:request-connection host="api.openweathermap.org" port="80" />
 	</http:request-config>
-	<api-gateway:autodiscovery apiId="16823244" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="018901bc-87ff-4548-b814-aadd8eae79ad" flowRef="weather_apiFlow" />
 	<flow name="weather_apiFlow" doc:id="8e919ccf-bb1c-48c9-91b0-147cfb9e1e4d" >
-		<http:listener doc:name="Listener" doc:id="9058f0fd-3320-4120-beb0-841a52a7fa61" config-ref="HTTP_Listener_config" path="/weather"/>
+		<http:listener doc:name="Listener" doc:id="9058f0fd-3320-4120-beb0-841a52a7fa61" config-ref="HTTP_Listener_config" path="/weather" />
 		<set-variable value="bbc704be84da27fdccd6cb18d8b19cb5" doc:name="key" doc:id="10e94527-e57f-4bb4-a6f3-a18efa0733b2" variableName="key"/>
 		<http:request method="GET" doc:name="Request" doc:id="3f163c35-46f8-4b92-b338-4274a7851615" config-ref="HTTP_Request_configuration" path="/weather">
 			<http:query-params ><![CDATA[#[output application/java
