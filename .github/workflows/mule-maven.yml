@@ -62,14 +62,14 @@ jobs:
 
  
 
-    – name : build
+     – name : build
 
      run: mvn -B package –file pom.xml
 
  
-   – name: Artifact file name with commit hash
+  – name: Artifact file name with commit hash
 
-   run: |
+  run: |
 
     artifactName1=$(ls target/*.jar | head -1)
 
@@ -133,8 +133,4 @@ jobs:
 
 artifactName=$(ls *.jar | head -1)
 
- 
-
- 
-
-mvn mule:deploy -Dmule.artifact=$artifactName -Dusername=$USERNAME -Dpassword=$PASSWORD
+mvn mule:deploy -Dmule.artifact=$artifactName -Dusername=$USERNAME -Dpassword=$PASSWORD 
