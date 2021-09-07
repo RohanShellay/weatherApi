@@ -15,7 +15,7 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v1
         with:
 
          path: ~/.m2/repository
@@ -32,13 +32,13 @@ jobs:
          distribution: 'adopt-hotspot'
          java-version: '8.0.232'
          
-      - name : build
-        run: mvn -B package –file pom.xml 
+      - name : build with maven
+        run: mvn -B package --file pom.xml 
         
       - name: Artifact file name with commit hash
         run: |
          artifactName1=$(ls target/*.jar | head -1)
-         commitHash=$(git rev-parse –short "$GITHUB_SHA")
+         commitHash=$(git rev-parse --short "$GITHUB_SHA")
          artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/.$commitHash.jar/g")
          mv $artifactName1 $artifactName2
          
@@ -54,7 +54,7 @@ jobs:
     steps:
 
      - uses: actions/checkout@v2
-     - uses: actions/cache@v2
+     - uses: actions/cache@v1
        with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
