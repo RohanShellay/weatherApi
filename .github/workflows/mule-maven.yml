@@ -1,59 +1,35 @@
 name: MuleSoft deployment with GitHub Actions CI
 
- 
-
-# Controls when the action will run.
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
- 
-# Allows you to run this workflow manually from the Actions tab workflow_dispatch:
+  jobs:
+  
+   build:
 
-workflow_dispatch:
+   runs-on: ubuntu-latest
+   steps:
 
-# A workflow run is made up of one or more jobs
+    – uses: actions/checkout@v2
 
-jobs:
+    uses: actions/cache@v2
 
-# “build”
+    with:
 
- build:
+    path: ~/.m2/repository
 
-# The type of runner that the job will run on
+    key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
 
-  runs-on: ubuntu-latest
+    restore-keys: |
 
- 
-
-# Steps represent a sequence of tasks that will be executed as part of the job
-
-  steps:
-
- 
-
-# Checks-out your repository
-
-   – uses: actions/checkout@v2
-
-   uses: actions/cache@v2
-
-   with:
-
-   path: ~/.m2/repository
-
-   key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
-
-   restore-keys: |
-
-    ${{ runner.os }}-maven-:
+${{ runner.os }}-maven-
 
     – name: Set up JDK 8
 
-    uses: actions/setup-java@v2
+    - uses: actions/setup-java@v2
 
     with:
      distribution: 'adopt-hotspot'
@@ -67,9 +43,9 @@ jobs:
      run: mvn -B package –file pom.xml
 
  
-  – name: Artifact file name with commit hash
+     – name: Artifact file name with commit hash
 
-  run: |
+     run: |
 
     artifactName1=$(ls target/*.jar | head -1)
 
@@ -77,60 +53,60 @@ jobs:
 
     artifactName2=$(ls target/*.jar | head -1 | sed “s/.jar/.$commitHash.jar/g”)
 
-    mv $artifactName1 $artifactName2:
+    mv $artifactName1 $artifactName2
 
  
 
-  – uses: actions/upload-artifact@master
+     – uses: actions/upload-artifact@master
 
-  with:
+     with:
 
-    name: artifacts
+      name: artifacts
 
-    path: target/*.jar
-
- 
-
- deploy:
-
- needs: build
-
- runs-on: ubuntu-latest
-
- steps:
-
-  – uses: actions/checkout@v2
-
-  uses: actions/cache@v2
-
-  with:
-
-  path: ~/.m2/repository
-
-  key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
-
-  restore-keys: |
-
-   ${{ runner.os }}-maven-:
-
- – uses: actions/download-artifact@master
-
- with:
-
-  name: artifacts
+      path: target/*.jar
 
  
 
- – name: Deploy to Anypoint Platform
+   deploy:
 
- env:
+   needs: build
 
-  USERNAME: ${{ secrets.ANYPOINT_USERNAME }}
+   runs-on: ubuntu-latest
 
-  PASSWORD: ${{ secrets.ANYPOINT_PASSWORD }}
+   steps:
+
+    – uses: actions/checkout@v2
+
+    uses: actions/cache@v2
+
+    with:
+
+    path: ~/.m2/repository
+
+    key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
+
+    restore-keys: |
+
+   ${{ runner.os }}-maven-
+
+   – uses: actions/download-artifact@master
+
+   with:
+
+   name: artifacts
+
+ 
+
+   – name: Deploy to Anypoint Platform
+
+   env:
+
+    USERNAME: ${{ secrets.ANYPOINT_USERNAME }}
+
+    PASSWORD: ${{ secrets.ANYPOINT_PASSWORD }}
 
   run: |
 
-artifactName=$(ls *.jar | head -1)
+      artifactName=$(ls *.jar | head -1)
 
-mvn mule:deploy -Dmule.artifact=$artifactName -Dusername=$USERNAME -Dpassword=$PASSWORD 
+      mvn mule:deploy -Dmule.artifact=$artifactName -Dusername=$USERNAME -Dpassword=$PASSWORD 
