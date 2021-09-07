@@ -4,6 +4,8 @@ name: MuleSoft deployment with GitHub Actions CI
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]  
 
   workflow_dispatch:
 
@@ -13,12 +15,12 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
 
          path: ~/.m2/repository
 
-         key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
+         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
          restore-keys: |
 
@@ -36,8 +38,8 @@ jobs:
       - name: Artifact file name with commit hash
         run: |
          artifactName1=$(ls target/*.jar | head -1)
-         commitHash=$(git rev-parse –short “$GITHUB_SHA”)
-         artifactName2=$(ls target/*.jar | head -1 | sed “s/.jar/.$commitHash.jar/g”)
+         commitHash=$(git rev-parse –short "$GITHUB_SHA")
+         artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/.$commitHash.jar/g")
          mv $artifactName1 $artifactName2
          
       - name: upload artifact  
@@ -55,7 +57,7 @@ jobs:
      - uses: actions/cache@v2
        with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles(‘**/pom.xml’) }}
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
          ${{ runner.os }}-maven-
      - uses: actions/download-artifact@master
