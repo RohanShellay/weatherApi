@@ -68,4 +68,6 @@ jobs:
          PASSWORD: ${{ secrets.ANYPOINT_PASSWORD }}
        run: |
         artifactName=$(ls *.jar | head -1)
+        echo "USERNAME CHECK:"
+        echo $USERNAME
         mvn mule:deploy -Dmule.artifact=$artifactName -Dusername=$USERNAME -Dpassword=$PASSWORD   
