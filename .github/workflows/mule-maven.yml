@@ -49,7 +49,7 @@ jobs:
 
    restore-keys: |
 
-${{ runner.os }}-maven-
+    ${{ runner.os }}-maven-:
 
     – name: Set up JDK 8
 
@@ -69,7 +69,7 @@ ${{ runner.os }}-maven-
  
    – name: Artifact file name with commit hash
 
-    run: |
+   run: |
 
 artifactName1=$(ls target/*.jar | head -1)
 
