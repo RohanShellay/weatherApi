@@ -70,4 +70,4 @@ jobs:
         artifactName=$(ls *.jar | head -1)
         echo "USERNAME CHECK:"
         echo $USERNAME
-        mvn mule:deploy -Dmule.artifact=$artifactName -Dusername="$USERNAME" -Dpassword="$PASSWORD"   
+        mvn deploy -DmuleDeploy -Dmule.artifact=$artifactName -Dusername="$USERNAME" -Dpassword="$PASSWORD"   
