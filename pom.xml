@@ -35,7 +35,7 @@
 		           <muleVersion>4.3.0</muleVersion>
 	                   <username>roh_aug</username>
                            <password>August08</password>
-                           <applicationName>weather-Api</applicationName>
+                           <applicationName>weather-Api1</applicationName>
                            <environment>Sandbox</environment>
                            <workers>1</workers>
                            <workerType>Micro</workerType>
