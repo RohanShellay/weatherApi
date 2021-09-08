@@ -33,7 +33,7 @@
                            <cloudHubDeployment>
                            <uri>https://anypoint.mulesoft.com</uri>
 		           <muleVersion>4.3.0</muleVersion>
-	                   <username>${usrname}</username>
+	                   <username>${username}</username>
                            <password>${password}</password>
                            <applicationName>weather-Api</applicationName>
                            <environment>Sandbox</environment>
