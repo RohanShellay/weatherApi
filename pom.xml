@@ -33,9 +33,9 @@
                            <cloudHubDeployment>
                            <uri>https://anypoint.mulesoft.com</uri>
 		           <muleVersion>4.3.0</muleVersion>
-	                   <username>roh_aug</username>
-                           <password>August08</password>
-                           <applicationName>weather-Api1</applicationName>
+	                   <username>${usrname}</username>
+                           <password>${password}</password>
+                           <applicationName>weather-Api</applicationName>
                            <environment>Sandbox</environment>
                            <workers>1</workers>
                            <workerType>Micro</workerType>
