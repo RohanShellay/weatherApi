@@ -35,7 +35,7 @@
 				<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
-				<version>${mule.maven.plugin.version}</version>
+				<version>3.4.2</version>
 				<extensions>true</extensions>
 				<configuration>
                                   <cloudHubDeployment>
@@ -47,6 +47,7 @@
                                     <environment>Sandbox</environment>
                                     <workers>1</workers>
                                     <workerType>Micro</workerType>
+			            <region>us-east-2</region>		  
                                     <objectStoreV2>true</objectStoreV2> 
                                    <properties>
                                     <key>value</key>
