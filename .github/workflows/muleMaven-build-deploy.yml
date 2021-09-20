@@ -1,6 +1,6 @@
 name: MuleSoft deployment with GitHub Actions CI
 
-# this is the event trigger
+# this is the event trigger for workflow
 on:
   push:
     branches: [ main ]
